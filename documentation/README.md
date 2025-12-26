@@ -10,6 +10,7 @@ De content wordt beheerd in Strapi 5 op Strapi Cloud, de frontend wordt als Vite
 
 - **Framework:** [React 18.3+](https://react.dev/)
 - **Build Tool:** [Vite](https://vitejs.dev/) (razendsnelle build & HMR)
+- **PWA:** `vite-plugin-pwa` voor offline support en installatie.
 - **Language:** [TypeScript](https://www.typescriptlang.org/) (voor type safety en betere DX)
 - **Routing:** [React Router v6](https://reactrouter.com/)
 
@@ -17,13 +18,15 @@ De content wordt beheerd in Strapi 5 op Strapi Cloud, de frontend wordt als Vite
 
 - **CSS Framework:** [Tailwind CSS](https://tailwindcss.com/) (Utility-first CSS)
 - **Icons:** [Lucide React](https://lucide.dev/)
+- **Maps:** MapLibre GL of React Leaflet (interactieve kaarten).
+- **3D/AR:** `@google/model-viewer` (voor 3D objecten en AR).
 - **Utilities:** `clsx` en `tailwind-merge` voor conditionele classnames.
 
 ### Data & State Management
 
 - **Data Fetching:** [TanStack Query (React Query) v5](https://tanstack.com/query/latest)
   - Verzorgt caching, loading states, en error handling.
-  - Voorkomt "prop drilling" en onnodige re-fetches.
+  - **Offline:** Geconfigureerd met persist opties (localStorage/IndexedDB) voor offline beschikbaarheid.
 - **API Client:** Native `fetch` met custom typed wrappers in `src/api/strapi.ts`.
 
 ### Content Rendering
@@ -134,15 +137,18 @@ De frontend verwacht een Strapi backend met de volgende structuur:
 
 - **Base URL:** Geconfigureerd via environment variabele `VITE_STRAPI_URL`.
 - **Collection Types:**
-  - `Article`: Met velden `title`, `description`, `slug`, `cover` (media), `category` (relation), `blocks` (dynamic zone).
-- **API Toegang:** De endpoints `/api/articles` en `/api/articles/:id` moeten publiek toegankelijk zijn (`find` en `findOne` permissies).
-  > Zorg in Strapi onder _Users & Permissions → Roles → Public_ dat `find` en `findOne` zijn ingeschakeld voor `Article`, anders kan de frontend de API niet benaderen.
+  - `Location`: POI's met GPS-coördinaten, titel, beschrijving en media.
+  - `Route`: Wandelingen met een lijst van locaties en route-informatie.
+  - `Deal`: Coupons of aanbiedingen gekoppeld aan locaties.
+- **API Toegang:** De endpoints voor deze collecties moeten publiek toegankelijk zijn (`find` en `findOne` permissies).
+  > Zorg in Strapi onder _Users & Permissions → Roles → Public_ dat `find` en `findOne` zijn ingeschakeld voor de nieuwe types, anders kan de frontend de API niet benaderen.
 
 ---
 
 ## 5. Best Practices in dit project
 
-1. **Mobile First Styling:** We gebruiken Tailwind CSS met een mobile-first benadering (basis classes zijn voor mobiel, `md:` en `lg:` voor grotere schermen).
-2. **Type Safety:** We vermijden `any` waar mogelijk. API responses zijn getypeerd zodat we autocomplete hebben in de IDE en fouten tijdens development vangen.
-3. **Component Composition:** Grote pagina's zijn opgeknipt in kleinere, herbruikbare componenten.
-4. **Accessibility:** We gebruiken semantische HTML (`<header>`, `<main>`, `<article>`, `<nav>`) en aria-labels waar nodig.
+1.  **Offline First:** De app mag nooit een wit scherm tonen als de verbinding wegvalt; data moet agressief gecacht worden.
+2.  **Mobile First Styling:** We gebruiken Tailwind CSS met een mobile-first benadering (basis classes zijn voor mobiel, `md:` en `lg:` voor grotere schermen).
+3.  **Type Safety:** We vermijden `any` waar mogelijk. API responses zijn getypeerd zodat we autocomplete hebben in de IDE en fouten tijdens development vangen.
+4.  **Component Composition:** Grote pagina's zijn opgeknipt in kleinere, herbruikbare componenten.
+5.  **Accessibility:** We gebruiken semantische HTML (`<header>`, `<main>`, `<article>`, `<nav>`) en aria-labels waar nodig.
