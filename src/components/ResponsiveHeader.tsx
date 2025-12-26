@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Search } from "lucide-react";
+import {
+  Menu,
+  X,
+  Search,
+  BookOpen,
+  FileText,
+  Users,
+  Briefcase,
+} from "lucide-react";
 import { cn } from "../lib/utils";
 
 const Header = () => {
@@ -10,10 +18,10 @@ const Header = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const navLinks = [
-    { name: "Blog", path: "/" },
-    { name: "Publications", path: "#" },
-    { name: "People", path: "#" },
-    { name: "Teams", path: "#" },
+    { name: "Blog", path: "/", icon: BookOpen },
+    { name: "Publications", path: "#", icon: FileText },
+    { name: "People", path: "#", icon: Users },
+    { name: "Teams", path: "#", icon: Briefcase },
   ];
 
   return (
@@ -33,10 +41,11 @@ const Header = () => {
                 key={link.name}
                 to={link.path}
                 className={cn(
-                  "text-sm font-medium uppercase tracking-wide text-gray-500 hover:text-blue-600 transition-colors",
+                  "flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-gray-500 hover:text-blue-600 transition-colors",
                   location.pathname === link.path && "text-blue-600"
                 )}
               >
+                <link.icon className="h-4 w-4" />
                 {link.name}
               </Link>
             ))}
@@ -70,11 +79,12 @@ const Header = () => {
                 key={link.name}
                 to={link.path}
                 className={cn(
-                  "text-sm font-medium uppercase tracking-wide text-gray-500 hover:text-blue-600",
+                  "flex items-center gap-3 text-sm font-medium uppercase tracking-wide text-gray-500 hover:text-blue-600",
                   location.pathname === link.path && "text-blue-600"
                 )}
                 onClick={() => setIsMenuOpen(false)}
               >
+                <link.icon className="h-5 w-5" />
                 {link.name}
               </Link>
             ))}
