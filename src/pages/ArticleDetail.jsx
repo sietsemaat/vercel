@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchArticle, getImageUrl } from "../api/strapi";
+import BlockRenderer from "../components/BlockRenderer";
 
 const ArticleDetail = () => {
   const { documentId } = useParams();
@@ -56,17 +57,9 @@ const ArticleDetail = () => {
           </p>
         )}
 
-        {/* Render content - assuming it might be rich text or markdown, but for now just dumping it if it's a string */}
-        {/* If Strapi returns blocks (Rich Text v2), we'd need a renderer. Assuming simple text or blocks for now. */}
-        <div style={{ marginTop: "2rem", lineHeight: "1.8" }}>
-          {/* Simple handling for now. If it's blocks, we might need more logic. */}
-          {/* Strapi v4 often returns blocks. Let's check if we can just JSON stringify it if it's complex, or render if text. */}
-          {/* For this demo, we'll assume it's simple or just show a placeholder if complex blocks */}
-          {typeof article.content === "string"
-            ? article.content
-            : article.blocks
-            ? "Content is in blocks format (requires renderer)"
-            : JSON.stringify(article.content)}
+        {/* Render content using BlockRenderer */}
+        <div style={{ marginTop: "2rem" }}>
+          <BlockRenderer blocks={article.blocks} />
         </div>
       </article>
     </div>

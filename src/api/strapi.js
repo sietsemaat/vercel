@@ -42,7 +42,10 @@ export const fetchArticles = async () => {
 
 export const fetchArticle = async (id) => {
   try {
-    const response = await fetch(`${STRAPI_URL}/api/articles/${id}?populate=*`);
+    // Populate blocks and their nested relations (like images in media/slider)
+    const response = await fetch(
+      `${STRAPI_URL}/api/articles/${id}?populate[blocks][populate]=*&populate[cover][populate]=*&populate[category][populate]=*&populate[author][populate]=*`
+    );
     if (!response.ok) {
       throw new Error(`Error fetching article: ${response.statusText}`);
     }
