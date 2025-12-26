@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { fetchArticle, getImageUrl } from "../api/strapi";
 
 const ArticleDetail = () => {
-  const { id } = useParams();
+  const { documentId } = useParams();
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,7 +11,7 @@ const ArticleDetail = () => {
   useEffect(() => {
     const loadArticle = async () => {
       try {
-        const data = await fetchArticle(id);
+        const data = await fetchArticle(documentId);
         setArticle(data);
       } catch (err) {
         setError(err.message);
@@ -21,7 +21,7 @@ const ArticleDetail = () => {
     };
 
     loadArticle();
-  }, [id]);
+  }, [documentId]);
 
   if (loading) return <div className="loading">Loading article...</div>;
   if (error) return <div className="error">Error: {error}</div>;

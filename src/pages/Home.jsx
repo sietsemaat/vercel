@@ -27,7 +27,7 @@ const Home = () => {
 
   return (
     <div className="container">
-      <h1>Latest Articles</h1>
+      <h1>Latest updates</h1>
       <ArticleList articles={articles} />
     </div>
   );
