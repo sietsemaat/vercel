@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Zyzo installeren</title>
+
+  <style>
+    body {
+      font-family: -apple-system, system-ui, sans-serif;
+      margin: 0;
+      padding: 24px;
+      text-align: center;
+      color: #111;
+    }
+    .wrap {
+      max-width: 420px;
+      margin: auto;
+    }
+    h1 {
+      font-size: 1.3rem;
+      margin: 16px 0;
+    }
+    p {
+      margin: 8px 0 20px;
+    }
+    .steps {
+      text-align: left;
+    }
+    .step {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin: 14px 0;
+    }
+    .slash {
+      width: 28px;
+      height: 28px;
+      position: relative;
+      margin-right: 8px;
+    }
+    .slash:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-left: 3px solid #111;
+      transform: rotate(45deg) scale(1);
+      transform-origin: center;
+      animation: slashAnim 1.5s infinite;
+    }
+    @keyframes slashAnim {
+      0%,
+      100% {
+        transform: rotate(45deg) scale(1);
+      }
+      50% {
+        transform: rotate(45deg) scale(1.3);
+      }
+    }
+    .btn {
+      display: none;
+      padding: 14px 18px;
+      background: #111;
+      color: #fff;
+      border-radius: 12px;
+      text-decoration: none;
+    }
+    .small {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 28px;
+    }
+  </style>
+
+  <div class="wrap">
+    <h1>Zyzo app installeren</h1>
+    <p id="intro">Geen App Store nodig. Klaar in 10 seconden.</p>
+
+    <!-- iOS -->
+    <div id="ios" hidden>
+      <div class="steps">
+        <div class="step">
+          <div class="slash"></div>
+          <div>Tik op <b>Delen</b></div>
+        </div>
+        <div class="step">
+          <div class="slash"></div>
+          <div>Kies <b>Zet op beginscherm</b></div>
+        </div>
+        <div class="step">
+          <div class="slash"></div>
+          <div>Tik op <b>Voeg toe</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Android -->
+    <a id="installBtn" class="btn">Installeer app</a>
+
+    <p class="small">Werkt offline • Veilig • Web-app</p>
+  </div>
+
+  <script>
+    const PWA_URL = "http://192.168.86.32:5173/";
+    const ua = navigator.userAgent;
+    const isIOS = /iPhone|iPad|iPod/.test(ua);
+    const isAndroid = /Android/.test(ua);
+
+    // detecteer al geïnstalleerd
+    if (
+      window.matchMedia("(display-mode: standalone)").matches ||
+      navigator.standalone
+    ) {
+      location.href = PWA_URL;
+    }
+
+    // platform tonen
+    if (isIOS) ios.hidden = false;
+
+    // Android install
+    let promptEvt;
+    addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      promptEvt = e;
+      installBtn.style.display = "inline-block";
+      installBtn.onclick = async () => {
+        promptEvt.prompt();
+        const r = await promptEvt.userChoice;
+        if (r.outcome === "accepted") location.href = PWA_URL;
+      };
+    });
+  </script>
+</html>
